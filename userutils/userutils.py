@@ -38,9 +38,9 @@ def yesNo(msg, incorrmsg="Please answer yes or no. "):
     while True:
         i = input(msg)
         if (i[0] in ["y", "Y"]):
-            return 0
+            return False
         elif (i[0] in ["n", "N"]):
-            return 1
+            return True
         else:
             print(incorrmsg)
 
@@ -73,6 +73,9 @@ class menu:
         """
         return True
     def addItem(self, id, name, callback):
+        for question in self.data:
+            if question[0] == id:
+                self.removeItem(id)
         if self.verify([[id, name, callback]]):
             self.data.append([id, name, callback])
     def removeItem(self, id):
