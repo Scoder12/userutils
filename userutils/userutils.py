@@ -35,8 +35,8 @@ def yesNo(msg, incorrmsg="Please answer yes or no. "):
     0 if the user answers yes
     1 if the user answers no
     """
-    i = input(msg)
     while True:
+        i = input(msg)
         if (i[0] in ["y", "Y"]):
             return 0
         elif (i[0] in ["n", "N"]):
@@ -81,7 +81,16 @@ class menu:
                 self.data.remove(i)
                 return
         raise IndexError("No such id "+id+" in items")
+    def changeData(self, q=defq, sep=defsep, prompt=defprompt, failmsg=deffailmsg, trnline=False):
+        self.q = q
+        self.sep = sep
+        self.prompt = prompt
+        self.failmsg = failmsg
+        self.trnline = trnline
     def show(self):
+        if (self.data == []):
+            print("Error: No data")
+            return
         while True:
             print(self.q)
             for i in self.data:
