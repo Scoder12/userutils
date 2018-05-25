@@ -38,14 +38,50 @@ def yesNo(msg, incorrmsg="Please answer yes or no. "):
     while True:
         i = input(msg)
         if (i[0] in ["y", "Y"]):
-            return False
-        elif (i[0] in ["n", "N"]):
             return True
+        elif (i[0] in ["n", "N"]):
+            return False
         else:
             print(incorrmsg)
 
-class menu:
+class Menu:
     """
+    Menu(): A class to let users choose what they want to do.  Fully customizable for your needs.  
+    Each item in the menu has an id, name, and callback.  Example: 
+    
+    Can be initialized with no paramaters or with customizations.  
+    q (str): Message to be asked of user.  Default: "What would you like to do? "
+    sep (str): The seperator between the id and option name.  Default: ". "
+    prompt (str): The prompt to ask the user after printing options.  Default: "Type an option: "
+    failmsg (str): The message to be displayed if the user provides an invalid option.  Default: "Invalid Option! "
+    trnline (bool): Whether to print an empty line before excuting the callback.  Default: False
+    
+    >>> def hi():
+    ..     print("Hello, World! ")
+    ..     
+    >>> def bye():
+    ..     print("Goodbye, World! ")
+    ..     
+    >>> menu = userutils.Menu(q="Which function? ", sep=": ", prompt="> ", failmsg="That's not an option! ", trnline=True)
+    >>> menu.addItem("1", "Say hi", hi) # Third paramter is function object, not call
+    >>> menu.addItem("2", "Say goodbye", bye)
+    >>> menu.addItem("3", "asdf", None)
+    >>> menu.removeItem("3")
+    >>> menu.addItem("1", "Say hello", hi) # Overrides if already exists
+    >>> menu.data
+    [['1', 'Say hello', <function hi at 0x7fce3152fd90>], ['2', 'Say goodbye', <function bye at 0x7fce3152fbf8>]]
+    >>> menu.show()
+    Which function? 
+    2:Say goodbye
+    1:Say hello
+    >  good afternoon
+    That's not an option! 
+    Which function? 
+    2:Say goodbye
+    1:Say hello
+    >  1
+
+    Hello, World! 
     """
     defq = "What would you like to do? "
     defsep = ". "
