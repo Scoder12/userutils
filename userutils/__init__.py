@@ -35,14 +35,13 @@ def yesNo(msg, incorrmsg="Please answer yes or no. "):
     0 if the user answers yes
     1 if the user answers no
     """
-    while True:
-        i = input(msg)
-        if (i[0] in ["y", "Y"]):
-            return True
-        elif (i[0] in ["n", "N"]):
-            return False
-        else:
-            print(incorrmsg)
+    i = input(msg)
+    if (i[0] in ["y", "Y"]):
+        return True
+    elif (i[0] in ["n", "N"]):
+        return False
+    else:
+        print(incorrmsg)
 
 class Menu:
     """
