@@ -1,8 +1,10 @@
 """
 menu.py
 File containing menu class.  
+This file is part of the userutils package https://github.com/Scoder12/userutils
 
 Copyright 2018 Scoder12
+
 Licensed under the MIT License.  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
