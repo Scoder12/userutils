@@ -24,21 +24,83 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTIO
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-def yesNo(msg, incorrmsg="Please answer yes or no. "):
-    """yesNo(msg, incorrmsg="Please answer yes or no. ")
-    Asks a user msg where the reponse shoud be yes or no.
-    Parameters:
-    msg (str): message to be asked of user
-    incorrmsg (str) [optional]: message to be printed if the user enters an invalid
-    input.
+import json
+
+
+def yesNo(msg, loop=True, incorrmsg="Please answer yes or no. "):
+    """Asks a user msg where the reponse shoud be yes or no.
+
+    Args:
+        msg (str): message to be asked of user
+        loop (bool): Whether to loop on invalid input or not
+        incorrmsg (str) [optional]: message to be printed if the user enters an invalid
+        input.
     Returns:
-    0 if the user answers yes
-    1 if the user answers no
+        True if the user answers yes
+        False if the user answers no
     """
-    i = input(msg)
-    if (i[0] in ["y", "Y"]):
-        return True
-    elif (i[0] in ["n", "N"]):
-        return False
-    else:
+    first = True
+    while loop or first:
+        first = False
+        i = input(msg)
+        if i[0].lower() == 'y':
+            return True
+        elif i[0].lower() == 'n':
+            return False
         print(incorrmsg)
+
+
+inps = []
+
+
+def getJSON(msg, loop=True, smart=True, 
+printerror=True, invalidjsonmsg="Please input some valid JSON!", enforcedtype=None, invalidtypemsg="Please enter the requested type. "):
+    """Gets JSON from the user. 
+
+    Args:
+        msg (str): Message to be shown for the prompt
+        loop (bool): Loop if invalid input recieved
+        smart (bool): Detect common errors and prompt user to fix them. Default True
+        invalidmsg (str): Message to be shown on invalid input
+        enforcedtype (any): If not None, then it will fail if it is a different type. Default: None
+    Returns:
+        The JSON object provided. 
+    """
+    global inps
+    first = True
+    while loop or first:
+        first = False
+        if len(inps) > 0:
+            i = inps[0]
+            inps.pop(0)
+        else:
+            i = input(msg)
+        try:
+            j = json.loads(i)
+        except Exception as e:
+            if hasattr(e, 'message'):
+                m = str(e.message)
+            else:
+                m = str(e)
+            if printerror:
+                print(m)
+            if m.startswith('Expecting property name enclosed in double quotes:'):
+                if yesNo('Non-double quotes detected. JSON must have double '
+                         'quotes to be parsed. Parse the JSON with all single'
+                         'quotes converted to double and escape double quotes? '
+                         ):
+                    i = i.replace('"', '\\"')
+                    i = i.replace("'", '"')
+                    inps.append(i)
+                else:
+                    print(invalidjsonmsg)
+                continue
+            print(invalidjsonmsg)
+        else:
+            if enforcedtype is not None:
+                if type(j) != enforcedtype:
+                    print(invalidtypemsg)
+                    continue
+            inps = []  # clear any inputs so as to not accidentally load them next run
+            return j
+        continue
